@@ -12,6 +12,8 @@ public class Hero {
     private Vector2 position;
     private float angle;
     private Vector2 lastDisplacement;
+    final float V_FRONT = 240.0f;
+    final float V_BACK = 120.0f;
 
     public Vector2 getLastDisplacement() {
         return lastDisplacement;
@@ -37,19 +39,28 @@ public class Hero {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             angle -= 180.0f * dt;
         }
+        lastDisplacement.set(0, 0);
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            position.x += MathUtils.cosDeg(angle) * 240.0f * dt;
-            position.y += MathUtils.sinDeg(angle) * 240.0f * dt;
-            lastDisplacement.set(MathUtils.cosDeg(angle) * 240.0f * dt,
-                    MathUtils.sinDeg(angle) * 240.0f * dt);
-        } else {
-            lastDisplacement.set(0, 0);
+            position.x += MathUtils.cosDeg(angle) * V_FRONT * dt;
+            position.y += MathUtils.sinDeg(angle) * V_FRONT * dt;
+            lastDisplacement.set(MathUtils.cosDeg(angle) * V_FRONT * dt,
+                    MathUtils.sinDeg(angle) * V_FRONT * dt);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            position.x -= MathUtils.cosDeg(angle) * V_BACK * dt;
+            position.y -= MathUtils.sinDeg(angle) * V_BACK * dt;
+            lastDisplacement.add(MathUtils.cosDeg(angle) * V_BACK * dt,
+                    MathUtils.sinDeg(angle) * V_BACK * dt);
         }
 
-        if (position.x < 32) {
+        if (position.x < 32)
             position.x = 32;
-        }
+        else if (position.x >= ScreenManager.SCREEN_WIDTH - 32)
+            position.x = ScreenManager.SCREEN_WIDTH - 32;
 
-
+        if(position.y < 32)
+            position.y = 32;
+        else if (position.y >= ScreenManager.SCREEN_HEIGHT - 32)
+            position.y = ScreenManager.SCREEN_HEIGHT - 32;
     }
 }
