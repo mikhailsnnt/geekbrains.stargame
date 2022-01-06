@@ -2,7 +2,8 @@ package com.star.app.screen;
 
 import com.badlogic.gdx.Screen;
 
-public  class AbstractScreen implements Screen {
+public class AbstractScreen implements Screen {
+
     @Override
     public void show() {
 

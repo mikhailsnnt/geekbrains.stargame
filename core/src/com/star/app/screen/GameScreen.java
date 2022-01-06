@@ -1,27 +1,29 @@
 package com.star.app.screen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.star.app.controllers.GameController;
-import com.star.app.renderers.WorldRenderer;
+import com.star.app.game.GameController;
+import com.star.app.game.WorldRenderer;
+import com.star.app.screen.utils.Assets;
 
-
-public class GameScreen  extends  AbstractScreen{
-    private GameController controller;
-    private WorldRenderer renderer;
+public class GameScreen extends AbstractScreen{
     private SpriteBatch batch;
+    private GameController gc;
+    private WorldRenderer worldRenderer;
+
     public GameScreen(SpriteBatch batch) {
         this.batch = batch;
     }
 
     @Override
     public void show() {
-        controller = new GameController();
-        renderer = new WorldRenderer(controller,batch);
+        Assets.getInstance().loadAssets(ScreenManager.ScreenType.GAME);
+        this.gc = new GameController();
+        this.worldRenderer = new WorldRenderer(gc, batch);
     }
 
-    public void render(float dt){
-        controller.update(dt);
-        renderer.render();
+    @Override
+    public void render(float delta) {
+        gc.update(delta);
+        worldRenderer.render();
     }
-
 }

@@ -1,20 +1,22 @@
 package com.star.app.game;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.star.app.game.helpers.ObjectPool;
+import com.star.app.screen.utils.Assets;
 
-public class BulletController extends ObjectPool<Bullet>  {
-    private Texture bulletTexture;
+public class BulletController extends ObjectPool<Bullet> {
+    private TextureRegion bulletTexture;
+    private GameController gc;
 
     @Override
     protected Bullet newObject() {
-        return new Bullet();
+        return new Bullet(gc);
     }
 
-    public BulletController() {
-        this.bulletTexture = new Texture("bullet.png");
+    public BulletController(GameController gc) {
+        this.gc= gc;
+        this.bulletTexture = Assets.getInstance().getAtlas().findRegion("bullet");
     }
 
     public void render(SpriteBatch batch) {
@@ -33,17 +35,5 @@ public class BulletController extends ObjectPool<Bullet>  {
             activeList.get(i).update(dt);
         }
         checkPool();
-    }
-
-    public boolean checkCollision(Vector2 position,float radius){
-        boolean result = false;
-        for (int i = 0; i < activeList.size(); i++) {
-            if (activeList.get(i).getPosition().dst(position) <= 8 + radius)
-            {
-                free(i);
-                result =  true;
-            }
-        }
-        return result;
     }
 }
