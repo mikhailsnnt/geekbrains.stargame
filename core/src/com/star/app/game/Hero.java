@@ -24,6 +24,7 @@ public class Hero {
     private int scoreView;
     private int hpMax;
     private int hp;
+    private int coinAmount;
     private StringBuilder sb;
     private Circle hitArea;
     private Weapon currentWeapon;
@@ -183,5 +184,14 @@ public class Hero {
             position.y = ScreenManager.SCREEN_HEIGHT - 32f;
             velocity.y *= -0.5f;
         }
+    }
+    public void addHp(int addAmount){
+        this.hp = Math.min(hp +  addAmount,hpMax);
+    }
+    public void addAmmo(int addAmount){
+        this.currentWeapon.addAmmo(addAmount);
+    }
+    public void addCoin(int addAmount){
+        this.coinAmount += addAmount;
     }
 }

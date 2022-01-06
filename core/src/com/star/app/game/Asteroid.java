@@ -118,4 +118,8 @@ public class Asteroid implements Poolable {
         hitArea.setPosition(position);
         hitArea.setRadius(BASE_RADIUS * scale * 0.9f);
     }
+
+    public float getScale() {
+        return scale;
+    }
 }

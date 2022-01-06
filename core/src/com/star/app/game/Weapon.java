@@ -60,4 +60,7 @@ public class Weapon {
             }
         }
     }
+    public void addAmmo(int addAmount){
+        curBullets= Math.min(maxBullets, addAmount + curBullets);
+    }
 }

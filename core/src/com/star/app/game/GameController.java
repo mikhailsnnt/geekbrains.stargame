@@ -9,8 +9,10 @@ public class GameController {
     private AsteroidController asteroidController;
     private BulletController bulletController;
     private ParticleController particleController;
+    private AsteroidLootController lootController;
     private Hero hero;
     private Vector2 tempVec;
+    private UsableLoot[] loots;
 
     public ParticleController getParticleController() {
         return particleController;
@@ -38,7 +40,9 @@ public class GameController {
         this.asteroidController = new AsteroidController(this);
         this.bulletController = new BulletController(this);
         this.particleController = new ParticleController();
+        this.lootController = new AsteroidLootController();
         this.tempVec = new Vector2();
+        this.loots = new UsableLoot[]{new AmmoLoot(this),new CoinLoot(this),new HealthKit(this)};
 
         for (int i = 0; i < 3; i++) {
             asteroidController.setup(MathUtils.random(0, ScreenManager.SCREEN_WIDTH),
@@ -54,6 +58,7 @@ public class GameController {
         asteroidController.update(dt);
         bulletController.update(dt);
         particleController.update(dt);
+        lootController.update(dt);
         checkCollisions();
     }
 
@@ -73,6 +78,7 @@ public class GameController {
 
                 if (a.takeDamage(2)) {
                     hero.addScore(a.getHpMax() * 50);
+                    spawnRandomLootInsteadAsteroid(a);
                 }
                 hero.takeDamage(2);
             }
@@ -95,12 +101,34 @@ public class GameController {
                     b.deactivate();
                     if (a.takeDamage(1)) {
                         hero.addScore(a.getHpMax() * 100);
+                        spawnRandomLootInsteadAsteroid(a);
                     }
                     break;
                 }
             }
         }
 
+        for (int i = 0; i < lootController.getActiveList().size(); i++) {
+            Loot loot = lootController.getActiveList().get(i);
+            if(hero.getHitArea().overlaps(loot.getHitArea())) {
+                loot.activateLoot();;
+            }
+        }
 
+
+
+
+    }
+
+    private void spawnRandomLootInsteadAsteroid(Asteroid asteroid){
+        float lootSpawnChance = 10 * asteroid.getScale();
+        if (MathUtils.random(0, 100) <= lootSpawnChance)
+        {
+            lootController.setUpLoot(asteroid.getPosition().x,asteroid.getPosition().y,64,loots[MathUtils.random(0,loots.length-1)]);
+        }
+    }
+
+    public AsteroidLootController getLootController() {
+        return lootController;
     }
 }
